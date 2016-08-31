@@ -26,6 +26,9 @@ namespace LinqExercises.Test.Controllers
         [TestMethod]
         public void GetAllEmployeeTests()
         {
+            // ARRANGE
+            _employeesController = new EmployeesController();
+
             // ACT
             IHttpActionResult actionResult = _employeesController.GetEmployees();
             var contentResult = actionResult as OkNegotiatedContentResult<IQueryable<Employee>>;

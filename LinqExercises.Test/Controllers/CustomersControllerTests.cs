@@ -27,6 +27,7 @@ namespace LinqExercises.Test.Controllers
         [TestMethod]
         public void GetAllCustomersInLondonTest()
         {
+
             // ACT
             IHttpActionResult actionResult = _customersController.GetAll("London");
             var contentResult = actionResult as OkNegotiatedContentResult<IQueryable<Customer>>;
@@ -66,6 +67,9 @@ namespace LinqExercises.Test.Controllers
         [TestMethod]
         public void GetCustomersWithoutOrders()
         {
+            // ARRANGE
+            _customersController = new CustomersController();
+
             // ACT
             IHttpActionResult actionResult = _customersController.GetCustomersWithoutOrders();
             var contentResult = actionResult as OkNegotiatedContentResult<IQueryable<Customer>>;

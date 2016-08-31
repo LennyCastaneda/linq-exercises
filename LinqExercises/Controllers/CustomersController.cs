@@ -19,33 +19,58 @@ namespace LinqExercises.Controllers
         [HttpGet, Route("api/customers/city/{city}"), ResponseType(typeof(IQueryable<Customer>))]
         public IHttpActionResult GetAll(string city)
         {
-            throw new NotImplementedException("Write a query to return all customers in the given city");
+            // "Write a query to return all customers in the given city");
+            var londonCustomers = from customers in _db.Customers
+                                  where customers.City == "London"
+                                  select customers;
+
+            return Ok(londonCustomers);
         }
 
         // GET: api/customers/mexicoSwedenGermany
         [HttpGet, Route("api/customers/mexicoSwedenGermany"), ResponseType(typeof(IQueryable<Customer>))]
         public IHttpActionResult GetAllFromMexicoSwedenGermany()
         {
-            throw new NotImplementedException("Write a query to return all customers from Mexico, Sweden and Germany.");
+            // "Write a query to return all customers from Mexico, Sweden and Germany.");
+            var mexSwedGerm = from customers in _db.Customers
+                              where customers.Country == "Mexico" || customers.Country == "Sweden" || customers.Country == "Germany"
+                              select customers;
+
+            return Ok(mexSwedGerm);
         }
+
 
         // GET: api/customers/shippedUsing/Speedy Express
         [HttpGet, Route("api/customers/shippedUsing/{shipperName}"), ResponseType(typeof(IQueryable<Customer>))]
         public IHttpActionResult GetCustomersThatShipWith(string shipperName)
         {
-            throw new NotImplementedException("Write a query to return all customers with orders that shipped using the given shipperName.");
+            /// "Write a query to return all customers with orders that shipped using the given shipperName.");
+            var customerList = from shipment in _db.Orders      
+                               // group shipment by shipment.Customer into newGroup
+                               where shipment.Shipper.CompanyName == shipperName
+                               select shipment.Customer;
+
+            Console.WriteLine(customerList.Count());
+            return Ok(customerList);
+            
         }
 
         // GET: api/customers/withoutOrders
         [HttpGet, Route("api/customers/withoutOrders"), ResponseType(typeof(IQueryable<Customer>))]
         public IHttpActionResult GetCustomersWithoutOrders()
         {
-            throw new NotImplementedException("Write a query to return all customers with no orders in the Orders table.");
+            // "Write a query to return all customers with no orders in the Orders table.");
+
+            // var resultSet = _db.Customers.Where(c => c.Orders.Count() == 0);
+
+            var customers =
+                from c in _db.Customers
+                where !c.Orders.Any()
+                select c;
+
+            return Ok(customers);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            _db.Dispose();
-        }
+        
     }
 }

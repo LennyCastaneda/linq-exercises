@@ -19,14 +19,30 @@ namespace LinqExercises.Controllers
         [HttpGet, Route("api/suppliers/salesAndMarketing"), ResponseType(typeof(IQueryable<Supplier>))]
         public IHttpActionResult GetSalesAndMarketing()
         {
-            throw new NotImplementedException("Write a query to return all Suppliers that are marketing managers or sales representatives that have a fax number");
+            // "Write a query to return all Suppliers that are marketing managers or 
+            // sales representatives that have a fax number");
+            var supplierList = from s in _db.Suppliers
+                               where s.Fax != null && (s.ContactTitle == "Marketing Manager" || s.ContactTitle == "Sales Representative")
+                               select s;
+
+            return Ok(supplierList);
         }
 
         //GET: api/suppliers/search
         [HttpGet, Route("api/suppliers/search"), ResponseType(typeof(IQueryable<Supplier>))]
         public IHttpActionResult SearchSuppliers(string term)
         {
-            throw new NotImplementedException("Write a query to return all Suppliers containing the 'term' variable in their address. The list should ordered alphabetically by company name.");
+            // "Write a query to return all Suppliers containing the 'term' variable in their address. 
+            // The list should ordered alphabetically by company name.");
+            var list = from a in _db.Suppliers
+                       orderby a.CompanyName
+                       where a.Address.Contains(term)
+                       select a;
+
+            return Ok(list);
+
+
+
         }
 
         protected override void Dispose(bool disposing)
